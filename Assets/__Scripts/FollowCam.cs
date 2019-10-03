@@ -4,66 +4,38 @@ using UnityEngine;
 
 
 
-public class FollowCam : MonoBehaviour {
+public class FollowCam : MonoBehaviour
+{
     static public GameObject POI; // The static point of interest
-
-    [Header("Set in Inspector")]
+                                  // static = singleton
+    [Header("Set in Inspectator")]
     public float easing = 0.05f;
-    public Vector2 minXY = Vector2.zero;
+
+    public Vector2 minXY = new Vector2(0, 0);
 
     [Header("Set Dynamically")]
-    public float camZ; // The desired z pos of the camera
 
+    public float camZ;                  // desired Z pos of the camera
+    // Use this for initialization
     private void Awake()
     {
         camZ = this.transform.position.z;
     }
-
-    private void FixedUpdate()
+    // Update is called once per frame
+    void FixedUpdate()              //get out of this method, no POI
     {
-        Vector3 destination;
-        // If there is no poi, return to P: [0,0,0]
-        if (POI == null)
-        {
-            destination = Vector3.zero;
-        }
-        else
-        {
-            // Get the position of the poi
-            destination = POI.transform.position;
-            // If poi is a Projectile, check to see if it's at rest
-            if (POI.tag == "Projectile")
-            {
-                // if it is sleeping (that is, not moving)
-                if (POI.GetComponent<Rigidbody>().IsSleeping())
-                {
-                    // return to default view
-                    // in the next update
-                    POI = null;
-                    return;
-                }
-            }
-        }
-
-
-        // Limit the X & Y to Max values
-        // the slingshot starts in -x, -y territory, so don't
-        // start moving until the projectile gets
-        // past the 0,0 point of the world
-
+        if (POI == null) return;
+        // get the position of the poi
+        Vector3 destination = POI.transform.position;
+        // limit the x & y to minimum values
         destination.x = Mathf.Max(minXY.x, destination.x);
         destination.y = Mathf.Max(minXY.y, destination.y);
-
-        // Interpolate from the current Camera position toward destination
+        // interpolate from the current Camera position toward the destition
         destination = Vector3.Lerp(transform.position, destination, easing);
-
-        // Force destination.z to be camZ to keep the camera far enough away
+        // force destination.z to be camZ to keep the camera far enough away
         destination.z = camZ;
+        transform.position = destination; // update camera position 
 
-        // Set the camera to the destination
-        transform.position = destination;
-
-        // Set the orthographicSize of the Camera to keep Ground in view
-        Camera.main.orthographicSize = destination.y + 10;
     }
+
 }
