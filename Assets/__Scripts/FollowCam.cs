@@ -35,6 +35,7 @@ public class FollowCam : MonoBehaviour
         // force destination.z to be camZ to keep the camera far enough away
         destination.z = camZ;
         transform.position = destination; // update camera position 
+        Camera.main.orthographicSize = destination.y + 10;
 
     }
 
