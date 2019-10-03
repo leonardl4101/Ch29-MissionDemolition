@@ -8,6 +8,7 @@ public class Slingshot : MonoBehaviour {
     // class level variable
     [Header("Set in variable")]
     public GameObject prefabProjectile;
+    public float velocityMult = 8f;
 
     [Header("Set dynamically")]
     public GameObject launchPoint;
@@ -15,6 +16,9 @@ public class Slingshot : MonoBehaviour {
     public Vector3 launchPos;
     public GameObject projectile;
     public bool aimingMode;
+    private Rigidbody projectileRigidbody;
+
+
 
 
     void Awake()
@@ -24,7 +28,13 @@ public class Slingshot : MonoBehaviour {
         launchPoint.SetActive(false);
         launchPos = launchPointTrans.position;
     } // end of Awake method
-    private void OnMouseDown()
+    private void Update()
+    {
+        // if slingshot is not in aimingMode, don't run the code
+        if (!aimingMode) return;      // bad code, bad
+    }
+
+    void OnMouseDown()
     {
         // the player has pressed the mouse button while over slingshot
         aimingMode = true;
@@ -33,10 +43,13 @@ public class Slingshot : MonoBehaviour {
         // start it at the launchPoint
         projectile.transform.position = launchPos;
         // set it to is Kinematic for now
-        projectile.GetComponent<Rigidbody>().isKinematic = true;
+        //projectile.GetComponent<Rigidbody>().isKinematic = true;
+        projectileRigidbody = projectile.GetComponent<Rigidbody>();
+        projectileRigidbody.isKinematic = true;
+
 
     }
-
+    
     // Use this for initialization
 
     void OnMouseEnter ()
