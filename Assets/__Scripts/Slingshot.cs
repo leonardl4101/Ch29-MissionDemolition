@@ -2,25 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// YOU must implement the Slingshot
 
 public class Slingshot : MonoBehaviour {
   
 
-// Place class variables here
+// Use this for initialization
 
+    void OnMouseEnter ()
 
-
-    private void Awake()
     {
+        print("Slingshot:OnMouseEnter()");
+    }
 
+    // Update is called once per frame
+
+    private void OnMouseExit()
+    {
+        print("Slingshot:OnMouseEnter()"); 
     }
 
 
-    private void Update()
-    {
- 
-
-
-    }
 }
